@@ -1,17 +1,20 @@
 import numpy as np
+import route 
 
-# Leer el archivo y extraer datos
-file_path = "/mnt/data/CMT1.vrp"
+# We open and read the file form where we are taking the information
+file_path = "Files/CMT1.vrp"
 with open(file_path, "r") as file:
     content = file.readlines()
 
 node_coords = []
 demands = {}
-deport = None
+deport_coords = None 
 
 reading_coords = False
 reading_demands = False
 reading_depot = False
+
+depot_values = []
 
 for line in content:
     line = line.strip()
@@ -36,19 +39,32 @@ for line in content:
         parts = line.split()
         demands[int(parts[0])] = int(parts[1])
     elif reading_depot:
-        depot = int(line) if line.isdigit() else depot
+        if line.isdigit() or (line.startswith('-') and line[1:].isdigit()):
+            depot_values.append(int(line))
 
-# Convertir listas a arrays de NumPy
-num_puntos = len(node_coords)
-coordenadas = np.zeros((num_puntos, 2))
-vector_demandas = np.zeros(num_puntos)
+# We check that we have taken the tuple of the depot point
+if len(depot_values) == 2:
+    depot_coords = tuple(depot_values)
+
+# We convert the list to an array
+num_points = len(node_coords)
+coordinates = np.zeros((num_points, 2))
+demands_vector = np.zeros(num_points)
 
 for i, (node, x, y) in enumerate(node_coords):
-    coordenadas[i] = [x, y]
-    vector_demandas[i] = demands.get(node, 0)
+    coordinates[i] = [x, y]
+    demands_vector[i] = demands.get(node, 0)
 
-# Mostrar resultados
+route_to_follow, time = route.define_route(coordinates, depot_values)
+clean_route = [(float(x), float(y)) for x, y in route_to_follow]
+
+# Show results
 print("Coordenadas:")
-print(coordenadas)
+print(coordinates)
 print("\nDemandas:")
-print(vector_demandas)
+print(demands_vector)
+print("\nCoordenadas del Depot:", depot_coords)
+print('\nRuta')
+print(clean_route)
+print("\nTiempo")
+print(time)
