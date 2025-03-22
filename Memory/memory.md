@@ -11,3 +11,21 @@
 To address this, I have developed a basic algorithm to solve the first relaxed version of the MTVRP. This algorithm starts at the depot and iteratively selects the nearest point using the Euclidean distance. It repeats this process, continuously finding and moving to the closest unvisited point, until all points have been reached. Finally, it returns the path followed to visit all the points and the total time taken.
 
 This first relaxed version is hardly an MTVRP, as it does not include multiple vehicles and lacks any constraints. However, I wanted to develop this initial version to create a basic algorithm and use it as a baseline for future improvements.</p>
+
+<h1>DAY 3</h1>
+<p>Today, several changes were made to improve and adapt the routing algorithm according to problem constraints:</p>
+
+<h2>Routing Strategy Updated</h2>
+<p>The original nearest-point (greedy) approach using Euclidean distance was replaced with a random coordinate selector.
+This was done to better align with the problem constraints.</p>
+
+<h2>Truck Capacity Constraint</h2>
+<p>The truck now has a limited capacity.
+
+It continues visiting random delivery points until it runs out of capacity.
+
+Once the capacity is reached and no further deliveries can be made, the truck returns to the depot.</p>
+
+<p>Some delivery points may remain unvisited if the truck cannot carry out more deliveries.
+
+This is an intentional placeholder: future versions will implement a multi-truck system, where new trucks are dispatched as needed.</p>
