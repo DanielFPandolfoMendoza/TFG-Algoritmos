@@ -1,23 +1,31 @@
 import numpy as np
-import route 
+import route
 
-# We open and read the file form where we are taking the information
+# We open and read the file from where we are taking the information
 file_path = "Files/CMT1.vrp"
 with open(file_path, "r") as file:
     content = file.readlines()
 
 node_coords = []
 demands = {}
-deport_coords = None 
+depot_coords = None 
 
 reading_coords = False
 reading_demands = False
 reading_depot = False
 
+capacity = None  # Variable para la capacidad
+
 depot_values = []
 
 for line in content:
     line = line.strip()
+    if line.startswith("CAPACITY"):
+        parts = line.split(":")
+        if len(parts) == 2:
+            capacity = int(parts[1].strip())
+        continue
+
     if line == "NODE_COORD_SECTION":
         reading_coords = True
         continue
@@ -55,7 +63,7 @@ for i, (node, x, y) in enumerate(node_coords):
     coordinates[i] = [x, y]
     demands_vector[i] = demands.get(node, 0)
 
-route_to_follow, time = route.define_route(coordinates, depot_values)
+route_to_follow, time, capacity = route.define_route(coordinates, depot_values, demands, capacity)
 clean_route = [(float(x), float(y)) for x, y in route_to_follow]
 
 # Show results
@@ -64,7 +72,10 @@ print(coordinates)
 print("\nDemandas:")
 print(demands_vector)
 print("\nCoordenadas del Depot:", depot_coords)
+print("Capacidad máxima del vehículo:", capacity)
 print('\nRuta')
 print(clean_route)
 print("\nTiempo")
 print(time)
+print("\nCapacidad")
+print(capacity)
