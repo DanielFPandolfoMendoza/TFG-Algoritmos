@@ -1,29 +1,36 @@
 import numpy as np
-import route
+import route 
 
-# We open and read the file from where we are taking the information
-file_path = "Files/CMT1.vrp"
+file_path = "Files/CMT6.vrp"
+
 with open(file_path, "r") as file:
     content = file.readlines()
 
 node_coords = []
 demands = {}
-depot_coords = None 
+depot_coords = None
 
 reading_coords = False
 reading_demands = False
 reading_depot = False
 
-capacity = None  # Variable para la capacidad
-
+capacity = None
+max_distance = None 
 depot_values = []
 
 for line in content:
     line = line.strip()
+    
     if line.startswith("CAPACITY"):
         parts = line.split(":")
         if len(parts) == 2:
             capacity = int(parts[1].strip())
+        continue
+    
+    if line.startswith("DISTANCE"):
+        parts = line.split(":")
+        if len(parts) == 2:
+            max_distance = float(parts[1].strip())
         continue
 
     if line == "NODE_COORD_SECTION":
@@ -50,11 +57,9 @@ for line in content:
         if line.isdigit() or (line.startswith('-') and line[1:].isdigit()):
             depot_values.append(int(line))
 
-# We check that we have taken the tuple of the depot point
 if len(depot_values) == 2:
     depot_coords = tuple(depot_values)
 
-# We convert the list to an array
 num_points = len(node_coords)
 coordinates = np.zeros((num_points, 2))
 demands_vector = np.zeros(num_points)
@@ -63,19 +68,23 @@ for i, (node, x, y) in enumerate(node_coords):
     coordinates[i] = [x, y]
     demands_vector[i] = demands.get(node, 0)
 
-route_to_follow, time, capacity = route.define_route(coordinates, depot_values, demands, capacity)
+route_to_follow, time, final_capacity, trucks = route.define_route(
+    coordinates, depot_coords, demands, capacity, max_distance
+)
+
 clean_route = [(float(x), float(y)) for x, y in route_to_follow]
 
-# Show results
+# Mostrar resultados
 print("Coordenadas:")
 print(coordinates)
 print("\nDemandas:")
 print(demands_vector)
 print("\nCoordenadas del Depot:", depot_coords)
 print("Capacidad máxima del vehículo:", capacity)
+print("Distancia máxima permitida por vehículo:", max_distance)
 print('\nRuta')
 print(clean_route)
-print("\nTiempo")
-print(time)
-print("\nCapacidad")
-print(capacity)
+print("Largo de la ruta:", len(clean_route))
+print("\nTiempo total:", time)
+print("\nCapacidad restante al final:", final_capacity)
+print("\nCantidad de camiones utilizados:", trucks)

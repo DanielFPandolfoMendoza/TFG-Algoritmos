@@ -19,13 +19,12 @@ This first relaxed version is hardly an MTVRP, as it does not include multiple v
 <p>The original nearest-point (greedy) approach using Euclidean distance was replaced with a random coordinate selector.
 This was done to better align with the problem constraints.</p>
 
-<h2>Truck Capacity Constraint</h2>
-<p>The truck now has a limited capacity.
+<h2>Truck Capacity & Distance Constraint</h2>
+<p>The truck now has a limited capacity and dsitance
 
 It continues visiting random delivery points until it runs out of capacity.
 
 Once the capacity is reached and no further deliveries can be made, the truck returns to the depot.</p>
 
-<p>Some delivery points may remain unvisited if the truck cannot carry out more deliveries.
-
-This is an intentional placeholder: future versions will implement a multi-truck system, where new trucks are dispatched as needed.</p>
+<p>Then it will search for another random point to keep delivering.
+In the next version i will include various trucks to achive all the restrictions and conditions of the MVRTP problem</p>
