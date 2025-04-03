@@ -1,7 +1,7 @@
 import numpy as np
 import route 
 
-file_path = "Files/CMT6.vrp"
+file_path = "Files/CMT2.vrp"
 
 with open(file_path, "r") as file:
     content = file.readlines()
