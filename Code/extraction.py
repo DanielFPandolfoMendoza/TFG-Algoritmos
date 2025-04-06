@@ -1,7 +1,8 @@
 import numpy as np
 import route 
+import time
 
-file_path = "Files/CMT2.vrp"
+file_path = "Files/CMT12.vrp"
 
 with open(file_path, "r") as file:
     content = file.readlines()
@@ -20,7 +21,6 @@ depot_values = []
 
 for line in content:
     line = line.strip()
-    
     if line.startswith("CAPACITY"):
         parts = line.split(":")
         if len(parts) == 2:
@@ -68,9 +68,13 @@ for i, (node, x, y) in enumerate(node_coords):
     coordinates[i] = [x, y]
     demands_vector[i] = demands.get(node, 0)
 
-route_to_follow, time, final_capacity, trucks = route.define_route(
+start_time = time.time()
+route_to_follow, route_time, final_capacity, trucks = route.define_route(
     coordinates, depot_coords, demands, capacity, max_distance
 )
+end_time = time.time() 
+
+
 
 clean_route = [(float(x), float(y)) for x, y in route_to_follow]
 
@@ -85,6 +89,7 @@ print("Distancia máxima permitida por vehículo:", max_distance)
 print('\nRuta')
 print(clean_route)
 print("Largo de la ruta:", len(clean_route))
-print("\nTiempo total:", time)
+print("\nTiempo total:", route_time)
+print(f"Tiempo de ejecución: {end_time - start_time:.4f} segundos")
 print("\nCapacidad restante al final:", final_capacity)
 print("\nCantidad de camiones utilizados:", trucks)
