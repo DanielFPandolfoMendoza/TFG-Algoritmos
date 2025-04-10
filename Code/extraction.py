@@ -68,12 +68,18 @@ for i, (node, x, y) in enumerate(node_coords):
     coordinates[i] = [x, y]
     demands_vector[i] = demands.get(node, 0)
 
-start_time = time.time()
-route_to_follow, route_time, final_capacity, trucks = route.define_route(
-    coordinates, depot_coords, demands, capacity, max_distance
-)
-end_time = time.time() 
-
+final_time = 0
+for i in range(1,101):
+    start_time = time.time()
+    route_to_follow, new_route_time, final_capacity, trucks = route.define_route(
+        coordinates, depot_coords, demands, capacity, max_distance
+    )
+    end_time = time.time() 
+    if i == 1:
+        route_time = new_route_time
+    if route_time > new_route_time:
+        route_time = new_route_time
+    final_time += end_time-start_time
 
 
 clean_route = [(float(x), float(y)) for x, y in route_to_follow]
@@ -90,6 +96,6 @@ print('\nRuta')
 print(clean_route)
 print("Largo de la ruta:", len(clean_route))
 print("\nTiempo total:", route_time)
-print(f"Tiempo de ejecución: {end_time - start_time:.4f} segundos")
+print(f"Tiempo de ejecución: {final_time} segundos")
 print("\nCapacidad restante al final:", final_capacity)
 print("\nCantidad de camiones utilizados:", trucks)

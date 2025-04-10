@@ -27,7 +27,7 @@ In the next version i will include various trucks to achive all the restrictions
 
 <h1>DAY 4</h1> 
 <p>This week, significant changes have been implemented as I have met all the restrictions of the MVRTP.</p> 
-
+.
 <p>I have modified the algorithm to support multiple vehicles, among other improvements. Let’s take a closer look:</p> 
 
 <h2>Algorithm Overview</h2> 
@@ -42,4 +42,12 @@ In the next version i will include various trucks to achive all the restrictions
 
 <p>Lastly, I will upload the results of this algorithm to compare them with those from the second part of this TFG, where I will develop a new version of the algorithm.</p>
 
+<h1>DAY 5</h1>
+
+<p>Today I obtained the results of the Phase 1 algorithm and created an Excel file to store them. I haven't created a tag yet, as these results might be incorrect or incomplete. Once I review them with my professor and make any necessary adjustments, I will update the file and assign a proper tag.</p>
+
+<h1>DAY 6</h1>
+
+<p>Over the past two days, I've been making changes to the code so that it can perform 100 executions of the algorithm and automatically store the best result. After that, I also improved and reorganized the Excel file containing the results.
+I have posted the updated version in the project's Markdown for documentation and review.</p>
 
