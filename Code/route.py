@@ -1,6 +1,9 @@
 import math
 import random
 
+def calculate_angle(origin, point):
+    return math.atan2(point[1] - origin[1], point[0] - origin[0])
+
 def euclidean_distance(p1, p2):
     return math.sqrt((p2[0]-p1[0])**2 + (p2[1]-p1[1])**2)
 
