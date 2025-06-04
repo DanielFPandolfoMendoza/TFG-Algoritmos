@@ -51,7 +51,7 @@ In the next version i will include various trucks to achive all the restrictions
 <p>Over the past two days, I've been making changes to the code so that it can perform 100 executions of the algorithm and automatically store the best result. After that, I also improved and reorganized the Excel file containing the results.
 I have posted the updated version in the project's Markdown for documentation and review.</p>
 
-<h1>DAY 7<7h1>
+<h1>DAY 7</h1>
 
 <p>After a few weeks of pause, I’ve begun the second phase of this thesis project, which involves implementing a sweep algorithm to determine the optimal order for making deliveries.
 
