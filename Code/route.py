@@ -14,8 +14,18 @@ def define_route(coordinates, depot, demands, capacity, max_distance):
     # Convertir las coordenadas a tuplas
     coordinates = [tuple(point) for point in coordinates]
     depot = tuple(depot)
-    remaining_indices = set(range(len(coordinates)))
-    
+
+    client_indices = [i for i, point in enumerate(coordinates) if point != depot]
+    clients_with_angles = [
+        (i, calculate_angle(depot, coordinates[i]))
+        for i in client_indices
+    ]
+    # Ordenar por -ángulo (mayor a menor) para barrido horario
+    clients_with_angles.sort(key=lambda x: -x[1])
+    ordered_indices = [x[0] for x in clients_with_angles]
+
+    remaining_indices = set(ordered_indices)
+
     # Variables para almacenar la ruta, la distancia total y la cantidad de camiones usados
     route = [depot]
     total_distance = 0
