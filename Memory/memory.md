@@ -61,3 +61,11 @@ To perform this calculation, a method called calculate_angle has been developed.
 
 The atan2 function determines the direction of one point in relation to another by calculating the angle between the positive x-axis and the vector formed by drawing a line from the depot to the delivery point. This allows the delivery points to be sorted in ascending order of their angles, enabling a clockwise sweep pattern.
 </p>
+
+<h1>DAY 8</h1>
+
+<p>After two days of work, I’ve modified the code to store the delivery points in a different order. I previously made an error in stating that sorting the angles from smallest to largest would result in a clockwise sweep—when in fact, it produces a counterclockwise one.
+
+While testing, I discovered that the atan2 function does not return angles in the full 0 to 360° range. Instead, it outputs values from 0 to 180° for points above the x-axis and from 0 to -180° for points below it. As a result, the sweep begins in the third quadrant, proceeds through the fourth, then the first, and finally the second, effectively creating a counterclockwise sweep.
+
+To address this, I reversed the sorting order of the points so that they are now stored from highest to lowest angle, ensuring a clockwise sweep as intended.</p>
