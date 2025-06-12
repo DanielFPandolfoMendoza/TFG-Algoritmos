@@ -3,7 +3,8 @@ This is the repository that i'm going to use for my tfg about algorithms. Here y
 
 <h1> Phase 1 final Results</h1>
 
-![imagen](https://github.com/user-attachments/assets/be22c8ef-c30c-4ec3-a018-e541d23ee274)
+![image](https://github.com/user-attachments/assets/b9874cb5-fd70-4db5-9fb6-e57389adceb2)
+
 
 <h1> Phase 2 final Results</h1>
 
