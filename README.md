@@ -7,4 +7,4 @@ This is the repository that i'm going to use for my tfg about algorithms. Here y
 
 <h1> Phase 2 final Results</h1>
 
-![image](https://github.com/user-attachments/assets/2c251e59-3826-46d6-bf76-7cb10cba1992)
+![image](https://github.com/user-attachments/assets/f56e4115-110a-4efe-b684-3eb0743bc043)
