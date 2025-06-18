@@ -8,4 +8,5 @@ This is the repository that i'm going to use for my tfg about algorithms. Here y
 
 <h1> Phase 2 final Results</h1>
 
-![image](https://github.com/user-attachments/assets/f56e4115-110a-4efe-b684-3eb0743bc043)
+![image](https://github.com/user-attachments/assets/e3e987e1-b2d4-40d1-9c5f-f9ed25ac7072)
+
