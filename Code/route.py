@@ -48,8 +48,7 @@ def define_route(coordinates, depot, demands, capacity, max_distance):
                 valid_indices.append(i)
 
         if valid_indices:
-            # Se selecciona aleatoriamente un cliente alcanzable
-            next_index = random.choice(valid_indices)
+            next_index = valid_indices[0]   
             next_point = coordinates[next_index]
             dist_to_next = euclidean_distance(current_point, next_point)
             # Avanzar al cliente

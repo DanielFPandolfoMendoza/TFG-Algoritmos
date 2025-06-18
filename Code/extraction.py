@@ -2,7 +2,7 @@ import numpy as np
 import route 
 import time
 
-file_path = "Files/CMT12.vrp"
+file_path = "Files/CMT1.vrp"
 
 with open(file_path, "r") as file:
     content = file.readlines()
@@ -77,12 +77,17 @@ for i in range(1,101):
     end_time = time.time() 
     if i == 1:
         route_time = new_route_time
+        route_final = route_to_follow
+        trucks_final = trucks
+        final_time = end_time-start_time
     if route_time > new_route_time:
         route_time = new_route_time
-    final_time += end_time-start_time
+        route_final = route_to_follow
+        trucks_final = trucks
+        final_time = end_time-start_time
 
 
-clean_route = [(float(x), float(y)) for x, y in route_to_follow]
+clean_route = [(float(x), float(y)) for x, y in route_final]
 
 # Mostrar resultados
 print("Coordenadas:")
@@ -98,4 +103,4 @@ print("Largo de la ruta:", len(clean_route))
 print("\nTiempo total:", route_time)
 print(f"Tiempo de ejecución: {final_time} segundos")
 print("\nCapacidad restante al final:", final_capacity)
-print("\nCantidad de camiones utilizados:", trucks)
+print("\nCantidad de camiones utilizados:", trucks_final)
