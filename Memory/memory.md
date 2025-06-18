@@ -69,3 +69,16 @@ The atan2 function determines the direction of one point in relation to another 
 While testing, I discovered that the atan2 function does not return angles in the full 0 to 360° range. Instead, it outputs values from 0 to 180° for points above the x-axis and from 0 to -180° for points below it. As a result, the sweep begins in the third quadrant, proceeds through the fourth, then the first, and finally the second, effectively creating a counterclockwise sweep.
 
 To address this, I reversed the sorting order of the points so that they are now stored from highest to lowest angle, ensuring a clockwise sweep as intended.</p>
+
+<h1>DAY 9</h1>
+
+<p>I’ve made some modifications to the sweep algorithm due to two mistakes I encountered:
+
+First, I wasn’t correctly storing the time, the trucks used, and the execution time produced by the sweep algorithm.
+
+Second, within the algorithm, I forgot to update the method for selecting the delivery points. As a result, the points were still being chosen randomly instead of following the correct order based on their angles.
+
+I have already updated the results from Phase 2, so the correct results are now available.
+
+Later today, I’ll begin updating the code to start Phase 3, which involves performing local search.</p>
+
