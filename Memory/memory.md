@@ -82,3 +82,40 @@ I have already updated the results from Phase 2, so the correct results are now 
 
 Later today, I’ll begin updating the code to start Phase 3, which involves performing local search.</p>
 
+<h2> Local Search Implementation: Exchange Method </h2>
+
+I have implemented the first local search algorithm: **exchange**.
+
+To do this, I had to make several modifications:
+
+<h3> route.py </h3>
+
+- Modified the route module so that each truck now stores its assigned route.
+
+<h3> extract.py </h3>
+
+1. **Updated `clean_routes`**  
+   - Now returns the individual routes for each truck.
+
+2. **Created `localsearch` function**  
+   - This function serves as the entry point for various local search methods.
+   - It evaluates the different methods and returns the one with the best execution time.
+   - If none of the methods improve the original time, the original solution is returned, indicating it remains the best.
+
+3. **Updated output display**  
+   - Now shows both the initial solution (with time, route, and number of trucks) and the solution obtained from local search (also with time, route, and trucks used).
+
+<h3> local_search.py </h3>
+
+This module contains several methods:
+
+1. **Helper Functions** (similar to those in `route` since they enforce the same constraints):
+   - `calculate_distance`: Calculates the distance between two points.
+   - `calculate_route_time`: Computes the total time of a route.
+   - `verify_distance_load`: Ensures that all constraints are met along the route to validate it.
+
+2. **Exchange Function**
+   - Generates alternative routes by swapping delivery points.
+   - Evaluates each new route and stores the best one to return as the result of the exchange method.
+
+

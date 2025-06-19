@@ -1,8 +1,34 @@
 import numpy as np
 import route 
 import time
+from local_search import exchange
 
-file_path = "Files/CMT1.vrp"
+def localsearch(clean_routes, coordinates, demands_vector, capacity, depot_coords, max_distance, route_time):
+    # Optimize using exchange
+    exchange_route, exchange_time = exchange(
+        clean_routes,
+        coordinates,
+        demands_vector,
+        capacity,
+        depot_coords,
+        max_distance
+    )
+    
+    # Compare results and choose the best
+    times = {
+        "original": route_time,
+        "exchange": exchange_time,
+    }
+    
+    best_method = min(times, key=lambda x: times[x])
+    best_time = times[best_method]
+    
+    if best_method == "exchange":
+        return exchange_route, best_time, best_method
+    else:
+        return clean_routes, route_time, best_method
+
+file_path = "Files/CMT12.vrp"
 
 with open(file_path, "r") as file:
     content = file.readlines()
@@ -86,21 +112,45 @@ for i in range(1,101):
         trucks_final = trucks
         final_time = end_time-start_time
 
+clean_routes = []
+for truck_route in route_final:
+    clean_route = [(float(x), float(y)) for x, y in truck_route]
+    clean_routes.append(clean_route)
 
-clean_route = [(float(x), float(y)) for x, y in route_final]
+# Optimize routes using all methods
+rutas_optimizadas, tiempo_total_optimizado, metodo_usado = localsearch(
+    clean_routes,
+    coordinates,
+    demands_vector,
+    capacity,
+    depot_coords,
+    max_distance, 
+    route_time
+)
 
-# Mostrar resultados
-print("Coordenadas:")
+print("Coordinates:")
 print(coordinates)
-print("\nDemandas:")
+print("\nDemands:")
 print(demands_vector)
-print("\nCoordenadas del Depot:", depot_coords)
-print("Capacidad máxima del vehículo:", capacity)
-print("Distancia máxima permitida por vehículo:", max_distance)
-print('\nRuta')
-print(clean_route)
-print("Largo de la ruta:", len(clean_route))
-print("\nTiempo total:", route_time)
-print(f"Tiempo de ejecución: {final_time} segundos")
-print("\nCapacidad restante al final:", final_capacity)
-print("\nCantidad de camiones utilizados:", trucks_final)
+print("\nDepot Coordinates:", depot_coords)
+print("Maximum vehicle capacity:", capacity)
+print("Maximum allowed distance per vehicle:", max_distance)
+print('\nInitial routes per truck:')
+for i, route in enumerate(clean_routes, 1):
+    print(f"\nInitial route for truck {i}:")
+    print(route)
+    print(f"Length of route {i}:", len(route))
+print("\nInitial total time:", route_time)
+print(f"Execution time: {final_time} seconds")
+print("\nRemaining capacity at the end:", final_capacity)
+print("\nNumber of trucks used:", trucks_final)
+
+print('\nOptimized routes per truck:')
+for i, route in enumerate(rutas_optimizadas, 1):
+    print(f"\nOptimized route for truck {i}:")
+    print(route)
+    print(f"Length of route {i}:", len(route))
+print("\nOptimized total time:", tiempo_total_optimizado)
+print(f"Method that gave best result: {metodo_usado}")
+
+
