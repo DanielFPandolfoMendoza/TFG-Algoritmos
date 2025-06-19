@@ -91,3 +91,77 @@ def exchange(routes, coordinates, demands_vector, capacity, depot_coords, max_di
         total_time += best_time
     
     return optimized_routes, total_time
+
+def insertion(routes, coordinates, demands_vector, capacity, depot_coords, max_distance):
+    optimized_routes = []
+    total_time = 0
+    
+    for route in routes:
+        if route[0] != depot_coords:
+            route.insert(0, depot_coords)
+        if route[-1] != depot_coords:
+            route.append(depot_coords)
+            
+        best_route = route.copy()
+        best_time = calculate_route_time(best_route)
+        
+        for i in range(1, len(route) - 1):
+            point = route[i]
+            for j in range(1, len(route)):
+                if i != j:
+                    new_route = route.copy()
+                    new_route.remove(point)
+                    new_route.insert(j, point)
+                    
+                    # Verify load and distance
+                    new_route, valid = verify_distance_load(new_route, coordinates, demands_vector, capacity, depot_coords, max_distance)
+                    if valid:
+                        new_time = calculate_route_time(new_route)
+                        
+                        if new_time < best_time:
+                            best_route = new_route
+                            best_time = new_time
+        
+        optimized_routes.append(best_route)
+        total_time += best_time
+    
+    return optimized_routes, total_time
+
+def opt2(routes, coordinates, demands_vector, capacity, depot_coords, max_distance):
+    optimized_routes = []
+    total_time = 0
+    
+    for route in routes:
+        if route[0] != depot_coords:
+            route.insert(0, depot_coords)
+        if route[-1] != depot_coords:
+            route.append(depot_coords)
+            
+        best_route = route.copy()
+        best_time = calculate_route_time(best_route)
+        
+        for i in range(1, len(route) - 2):
+            for j in range(i + 1, len(route) - 1):
+                new_route = route.copy()
+                segment = new_route[i:j+1]
+                segment.reverse()
+                new_route[i:j+1] = segment
+                
+                # Verify load and distance
+                new_route, valid = verify_distance_load(new_route, coordinates, demands_vector, capacity, depot_coords, max_distance)
+                if valid:
+                    new_time = calculate_route_time(new_route)
+                    
+                    if new_time < best_time:
+                        best_route = new_route
+                        best_time = new_time
+        
+        optimized_routes.append(best_route)
+        total_time += best_time
+    
+    return optimized_routes, total_time
+
+    
+
+
+

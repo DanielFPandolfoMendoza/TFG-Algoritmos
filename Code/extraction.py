@@ -1,11 +1,31 @@
 import numpy as np
 import route 
 import time
-from local_search import exchange
+from local_search import exchange, insertion, opt2
 
 def localsearch(clean_routes, coordinates, demands_vector, capacity, depot_coords, max_distance, route_time):
     # Optimize using exchange
     exchange_route, exchange_time = exchange(
+        clean_routes,
+        coordinates,
+        demands_vector,
+        capacity,
+        depot_coords,
+        max_distance
+    )
+
+    # Optimize using insertion
+    insertion_route, insertion_time = insertion(
+        clean_routes,
+        coordinates,
+        demands_vector,
+        capacity,
+        depot_coords,
+        max_distance
+    )
+    
+    # Optimize using 2-opt
+    opt2_route, opt2_time = opt2(
         clean_routes,
         coordinates,
         demands_vector,
@@ -18,6 +38,8 @@ def localsearch(clean_routes, coordinates, demands_vector, capacity, depot_coord
     times = {
         "original": route_time,
         "exchange": exchange_time,
+        "insertion": insertion_time,
+        "2-opt": opt2_time
     }
     
     best_method = min(times, key=lambda x: times[x])
@@ -25,8 +47,12 @@ def localsearch(clean_routes, coordinates, demands_vector, capacity, depot_coord
     
     if best_method == "exchange":
         return exchange_route, best_time, best_method
+    elif best_method == "insertion":
+        return insertion_route, best_time, best_method
+    elif best_method == "2-opt":
+        return opt2_route, best_time, best_method
     else:
-        return clean_routes, route_time, best_method
+        return clean_routes, route_time, "original"
 
 file_path = "Files/CMT12.vrp"
 

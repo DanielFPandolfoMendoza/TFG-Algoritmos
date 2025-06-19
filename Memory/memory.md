@@ -118,4 +118,22 @@ This module contains several methods:
    - Generates alternative routes by swapping delivery points.
    - Evaluates each new route and stores the best one to return as the result of the exchange method.
 
+<h1> Day 10 </h1>
+
+<h2> Local Search Expansion </h2>
+
+<p> Today, I added the remaining two local search methods. To do this, I had to make several modifications: </p>
+
+<h3> local_search </h3>
+
+1. **Added the `insertion` method**  
+  Implements the insertion algorithm, applying the same constraints used in the exchange method.
+
+2. **Added the `opt2` method**  
+  Implements the 2-opt algorithm, also respecting the same constraints as the exchange method.
+
+<h3> extraction </h3>
+
+- **Modified the `localsearch` function**  
+  Now also calls the `insertion` and `opt2` methods. It records the execution times of all three methods (exchange, insertion, and opt2), compares them, and returns the best solution.
 
