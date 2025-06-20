@@ -59,7 +59,6 @@ def define_route(coordinates, depot, demands, capacity, max_distance):
                     total_distance += dist_to_depot
                     current_distance -= dist_to_depot
                 current_route.append(depot)
-                all_routes.append(current_route)
                 break
 
         else:
@@ -68,10 +67,8 @@ def define_route(coordinates, depot, demands, capacity, max_distance):
                 total_distance += dist_to_depot
                 current_distance -= dist_to_depot
                 current_route.append(depot)
-                all_routes.append(current_route)
                 current_point = depot
                 current_capacity = capacity
-                current_route = [depot]
 
             reachable = False
             for i in remaining_indices:
@@ -83,6 +80,7 @@ def define_route(coordinates, depot, demands, capacity, max_distance):
             if reachable:
                 continue
             else:
+                all_routes.append(current_route)
                 trucks += 1
                 current_capacity = capacity
                 current_distance = max_distance
@@ -90,4 +88,5 @@ def define_route(coordinates, depot, demands, capacity, max_distance):
                 current_point = depot
                 continue
 
+    all_routes.append(current_route)
     return all_routes, total_distance, current_capacity, trucks
