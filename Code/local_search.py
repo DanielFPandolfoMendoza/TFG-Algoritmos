@@ -14,10 +14,6 @@ def verify_distance_load(route, coordinates, demands_vector, capacity, depot_coo
     accumulated_distance = 0
     new_route = [route[0]]
     
-    # Add initial distance from depot to first point
-    if len(route) > 1:
-        accumulated_distance += calculate_distance(depot_coords, route[1])
-    
     for i in range(1, len(route)):
         point = route[i]
         
@@ -52,11 +48,6 @@ def verify_distance_load(route, coordinates, demands_vector, capacity, depot_coo
         new_route.append(point)
         current_load += point_demand
         accumulated_distance += dist_to_point
-    
-    # Add final depot only if we didn't end at it
-    if new_route[-1] != depot_coords:
-        new_route.append(depot_coords)
-        accumulated_distance += calculate_distance(new_route[-2], depot_coords)
     
     return new_route, True
 
