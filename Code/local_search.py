@@ -1,55 +1,6 @@
-import math
+from utils import calculate_route_time, verify_distance_load, calculate_total_time
 
-def calculate_distance(point1, point2):
-    return math.sqrt((point2[0] - point1[0])**2 + (point2[1] - point1[1])**2)
-
-def calculate_route_time(route):
-    total_time = 0
-    for i in range(len(route) - 1):
-        total_time += calculate_distance(route[i], route[i + 1])
-    return total_time
-
-def verify_distance_load(route, coordinates, demands_vector, capacity, depot_coords, max_distance):
-    current_load = 0
-    accumulated_distance = 0
-    new_route = [route[0]]
-    
-    for i in range(1, len(route)):
-        point = route[i]
-        
-        point_demand = 0
-        for j, coord in enumerate(coordinates):
-            if abs(coord[0] - point[0]) == 0 and abs(coord[1] - point[1]) == 0:
-                point_demand = demands_vector[j]
-                break
-        
-        # 1. Check if there's enough distance to go to the point and return to depot
-        dist_to_point = calculate_distance(new_route[-1], point)
-        dist_to_depot = calculate_distance(point, depot_coords)
-        needed_distance = dist_to_point + dist_to_depot
-        
-        if accumulated_distance + needed_distance > max_distance:
-            # If not enough distance, route cannot be completed
-            return None, False
-        
-        # 2. Check if there's enough load
-        if current_load + point_demand > capacity:
-            new_route.append(depot_coords)
-            current_load = 0
-            dist_to_point = calculate_distance(depot_coords, point)
-            dist_to_depot = calculate_distance(point, depot_coords)
-            needed_distance = dist_to_point + dist_to_depot
-            
-            # 3. Check if with remaining distance can reach the point
-            if accumulated_distance + needed_distance > max_distance:
-                # If not enough distance after reloading, route cannot be completed
-                return None, False
-        
-        new_route.append(point)
-        current_load += point_demand
-        accumulated_distance += dist_to_point
-    
-    return new_route, True
+#region simple methods
 
 def exchange(routes, coordinates, demands_vector, capacity, depot_coords, max_distance):
     optimized_routes = []
@@ -82,6 +33,7 @@ def exchange(routes, coordinates, demands_vector, capacity, depot_coords, max_di
         total_time += best_time
     
     return optimized_routes, total_time
+
 
 def insertion(routes, coordinates, demands_vector, capacity, depot_coords, max_distance):
     optimized_routes = []
@@ -118,6 +70,7 @@ def insertion(routes, coordinates, demands_vector, capacity, depot_coords, max_d
     
     return optimized_routes, total_time
 
+
 def opt2(routes, coordinates, demands_vector, capacity, depot_coords, max_distance):
     optimized_routes = []
     total_time = 0
@@ -152,7 +105,44 @@ def opt2(routes, coordinates, demands_vector, capacity, depot_coords, max_distan
     
     return optimized_routes, total_time
 
-    
+#endregion
 
+def combined_optimization(routes, coordinates, demands_vector, capacity, depot_coords, max_distance, route_time):
+    
+    all_methods = [
+        exchange,
+        insertion,
+        opt2
+    ]
+    
+    current_routes = routes.copy()
+    best_total_time = route_time
+    improvement_found = True
+    
+    # Continue while we find improvements in a cycle
+    while improvement_found:
+        improvement_found = False
+        
+        # Try each method in sequence
+        for method in all_methods:
+            optimized_routes, total_time = method(current_routes.copy(), coordinates, demands_vector, capacity, depot_coords, max_distance)
+            
+            actual_time = calculate_total_time(optimized_routes)
+
+            if abs(actual_time - total_time) > 0.01:
+                total_time = actual_time
+
+            if total_time < best_total_time:
+                current_routes = optimized_routes
+                best_total_time = total_time
+                improvement_found = True
+                print(f"Found improvement: {best_total_time}")
+    
+    # Final verification of the best solution
+    final_time = calculate_total_time(current_routes)
+    if abs(final_time - best_total_time) > 0.01:
+        best_total_time = final_time
+    
+    return current_routes, best_total_time
 
 

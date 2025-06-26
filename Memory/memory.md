@@ -137,3 +137,24 @@ This module contains several methods:
 - **Modified the `localsearch` function**  
   Now also calls the `insertion` and `opt2` methods. It records the execution times of all three methods (exchange, insertion, and opt2), compares them, and returns the best solution.
 
+<h1> Day 11 </h1>
+
+<p>Today, I didn’t make progress on new functionality, but instead focused on refining the local search approach and improving certain aspects such as output formatting and loop structures.</p>
+
+<h2> Changes in Local Search </h2>
+
+- Instead of executing each local search algorithm independently and selecting the best result, I refactored the logic so that all algorithms are executed in sequence.
+- The output of the first algorithm becomes the input for the second, and so on, as long as improvements are being found.
+- Once the best possible solution is reached (i.e., no further improvements), it is returned and the enhancements are displayed.
+
+<h2> Changes in `extraction.py` </h2>
+
+- Updated the call to local search to reflect the new sequential structure.
+- Modified the output to clearly show both the original routes and the optimized ones, allowing for easy comparison.
+
+<h2> Creation of `utils.py` </h2>
+
+- Since additional algorithms will be implemented, I created a utility module to centralize all problem constraints.
+- This avoids redundancy and keeps the codebase cleaner by reusing validation methods across different algorithms.
+
+

@@ -1,58 +1,23 @@
 import numpy as np
-import route 
 import time
-from local_search import exchange, insertion, opt2
+from route import define_route
+from local_search import combined_optimization
+from utils import calculate_route_time
 
 def localsearch(clean_routes, coordinates, demands_vector, capacity, depot_coords, max_distance, route_time):
-    # Optimize using exchange
-    exchange_route, exchange_time = exchange(
+    optimized_routes, optimized_time = combined_optimization(
         clean_routes,
         coordinates,
         demands_vector,
         capacity,
         depot_coords,
-        max_distance
+        max_distance,
+        route_time
     )
+    
+    return optimized_routes, optimized_time
 
-    # Optimize using insertion
-    insertion_route, insertion_time = insertion(
-        clean_routes,
-        coordinates,
-        demands_vector,
-        capacity,
-        depot_coords,
-        max_distance
-    )
-    
-    # Optimize using 2-opt
-    opt2_route, opt2_time = opt2(
-        clean_routes,
-        coordinates,
-        demands_vector,
-        capacity,
-        depot_coords,
-        max_distance
-    )
-    
-    # Compare results and choose the best
-    times = {
-        "original": route_time,
-        "exchange": exchange_time,
-        "insertion": insertion_time,
-        "2-opt": opt2_time
-    }
-    
-    best_method = min(times, key=lambda x: times[x])
-    best_time = times[best_method]
-    
-    if best_method == "exchange":
-        return exchange_route, best_time, best_method
-    elif best_method == "insertion":
-        return insertion_route, best_time, best_method
-    elif best_method == "2-opt":
-        return opt2_route, best_time, best_method
-    else:
-        return clean_routes, route_time, "original"
+#region problem instances
 
 file_path = "Files/CMT12.vrp"
 
@@ -120,19 +85,18 @@ for i, (node, x, y) in enumerate(node_coords):
     coordinates[i] = [x, y]
     demands_vector[i] = demands.get(node, 0)
 
+#endregion
+
+#region sweeping algorithm
+
 final_time = 0
 for i in range(1,101):
     start_time = time.time()
-    route_to_follow, new_route_time, final_capacity, trucks = route.define_route(
+    route_to_follow, new_route_time, final_capacity, trucks = define_route(
         coordinates, depot_coords, demands, capacity, max_distance
     )
     end_time = time.time() 
-    if i == 1:
-        route_time = new_route_time
-        route_final = route_to_follow
-        trucks_final = trucks
-        final_time = end_time-start_time
-    if route_time > new_route_time:
+    if i == 1 or route_time > new_route_time:
         route_time = new_route_time
         route_final = route_to_follow
         trucks_final = trucks
@@ -143,8 +107,24 @@ for truck_route in route_final:
     clean_route = [(float(x), float(y)) for x, y in truck_route]
     clean_routes.append(clean_route)
 
+total_initial_distance = 0
+print("\nValidating initial routes:")
+print("-------------------------")
+for i, route in enumerate(clean_routes, 1):
+    distance = calculate_route_time(route)
+    print(f"Route {i} distance: {distance:.2f}")
+    total_initial_distance += distance
+print(f"Total initial distance: {total_initial_distance:.2f}")
+print(f"Reported initial distance: {route_time:.2f}")
+if abs(total_initial_distance - route_time) > 0.01:
+    print("WARNING: Initial distance calculation mismatch!")
+
+#endregion
+
+#region local optimization
+
 # Optimize routes using all methods
-rutas_optimizadas, tiempo_total_optimizado, metodo_usado = localsearch(
+rutas_optimizadas, tiempo_total_optimizado = localsearch(
     clean_routes,
     coordinates,
     demands_vector,
@@ -154,29 +134,26 @@ rutas_optimizadas, tiempo_total_optimizado, metodo_usado = localsearch(
     route_time
 )
 
-print("Coordinates:")
-print(coordinates)
-print("\nDemands:")
-print(demands_vector)
-print("\nDepot Coordinates:", depot_coords)
-print("Maximum vehicle capacity:", capacity)
-print("Maximum allowed distance per vehicle:", max_distance)
-print('\nInitial routes per truck:')
-for i, route in enumerate(clean_routes, 1):
-    print(f"\nInitial route for truck {i}:")
-    print(route)
-    print(f"Length of route {i}:", len(route))
-print("\nInitial total time:", route_time)
-print(f"Execution time: {final_time} seconds")
-print("\nRemaining capacity at the end:", final_capacity)
-print("\nNumber of trucks used:", trucks_final)
-
-print('\nOptimized routes per truck:')
+# Validate final optimized routes
+total_optimized_distance = 0
+print("\nValidating final optimized routes:")
+print("--------------------------------")
 for i, route in enumerate(rutas_optimizadas, 1):
-    print(f"\nOptimized route for truck {i}:")
+    distance = calculate_route_time(route)
+    print(f"Route {i} distance: {distance:.2f}")
+    total_optimized_distance += distance
+print(f"Total optimized distance: {total_optimized_distance:.2f}")
+print(f"Reported optimized distance: {tiempo_total_optimizado:.2f}")
+if abs(total_optimized_distance - tiempo_total_optimizado) > 0.01:
+    print("WARNING: Optimized distance calculation mismatch!")
+
+print("\nOptimized Solution:")
+print(f"Number of trucks used: {len(rutas_optimizadas)}")
+print(f"Total time: {tiempo_total_optimizado:.2f}")
+print(f"Improvement: {((route_time - tiempo_total_optimizado) / route_time) * 100:.2f}%")
+print("\nOptimized routes per truck:")
+for i, route in enumerate(rutas_optimizadas, 1):
+    print(f"\nTruck {i} route ({len(route)} points):")
     print(route)
-    print(f"Length of route {i}:", len(route))
-print("\nOptimized total time:", tiempo_total_optimizado)
-print(f"Method that gave best result: {metodo_usado}")
 
-
+#endregion
