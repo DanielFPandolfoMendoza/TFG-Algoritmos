@@ -14,5 +14,10 @@ This is the repository that i'm going to use for my tfg about algorithms. Here y
 
 ![image](https://github.com/user-attachments/assets/840e656f-7a3b-48e3-98bc-345bccca0097)
 
+<h1> Phase 3 final Rsults</h1>
+
+![image](https://github.com/user-attachments/assets/8bb8c8e9-1078-4f11-ae60-a4feb6a97dc9)
+
+
 
 
