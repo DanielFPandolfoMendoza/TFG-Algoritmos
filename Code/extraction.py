@@ -123,7 +123,10 @@ if abs(total_initial_distance - route_time) > 0.01:
 
 #region local optimization
 
+
+optimization_time = 0
 # Optimize routes using all methods
+start_time = time.time()
 rutas_optimizadas, tiempo_total_optimizado = localsearch(
     clean_routes,
     coordinates,
@@ -133,6 +136,8 @@ rutas_optimizadas, tiempo_total_optimizado = localsearch(
     max_distance, 
     route_time
 )
+end_time = time.time()
+optimization_time = end_time - start_time
 
 # Validate final optimized routes
 total_optimized_distance = 0
@@ -151,6 +156,7 @@ print("\nOptimized Solution:")
 print(f"Number of trucks used: {len(rutas_optimizadas)}")
 print(f"Total time: {tiempo_total_optimizado:.2f}")
 print(f"Improvement: {((route_time - tiempo_total_optimizado) / route_time) * 100:.2f}%")
+print(f"Optimization time: {optimization_time:.2f} seconds")
 print("\nOptimized routes per truck:")
 for i, route in enumerate(rutas_optimizadas, 1):
     print(f"\nTruck {i} route ({len(route)} points):")

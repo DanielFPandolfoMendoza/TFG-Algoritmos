@@ -157,4 +157,22 @@ This module contains several methods:
 - Since additional algorithms will be implemented, I created a utility module to centralize all problem constraints.
 - This avoids redundancy and keeps the codebase cleaner by reusing validation methods across different algorithms.
 
+<h1> DAY 12 </h1>
+
+<p> Following a meeting with my supervisors, I was able to implement an improved version of the local search algorithms, 
+now capable of making exchanges **between the routes of different trucks**.</p>
+
+<h2> Exclusion of Inter-route 2-opt </h2>
+
+<p> I decided **not** to include the inter-route 2-opt algorithm for three main reasons: </p>
+
+1. **Algorithmic complexity**: The inter-route version significantly increases complexity compared to the basic 2-opt.
+2. **Performance concerns**: Its complexity reaches **O(n⁴)**, and with the outer loops included, it can climb to **O(n⁶)**.
+3. **Inefficiency**: Given the already high execution time of basic 2-opt, the additional time required by the inter-route version is not justified by the potential improvement in solution quality.
+
+<h2> Code Changes </h2>
+
+<p> The more complex local search algorithms, including inter-route logic (except inter-route 2-opt), have been added to the `local_search.py` file. </p>
+
+
 
