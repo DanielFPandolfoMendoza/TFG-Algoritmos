@@ -215,6 +215,9 @@ def combined_optimization(routes, coordinates, demands_vector, capacity, depot_c
     if abs(final_time - best_total_time) > 0.01:
         best_total_time = final_time
     
-    return current_routes, best_total_time
+    # Filter out routes that only contain the depot point
+    filtered_routes = [route for route in current_routes if len(route) > 2 or (len(route) == 2 and route[0] != route[1])]
+    
+    return filtered_routes, best_total_time
 
 
