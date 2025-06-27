@@ -10,3 +10,9 @@ This is the repository that i'm going to use for my tfg about algorithms. Here y
 
 ![image](https://github.com/user-attachments/assets/e3e987e1-b2d4-40d1-9c5f-f9ed25ac7072)
 
+<h1> Phase 3 simple Algorithm Results</h1>
+
+![image](https://github.com/user-attachments/assets/840e656f-7a3b-48e3-98bc-345bccca0097)
+
+
+
