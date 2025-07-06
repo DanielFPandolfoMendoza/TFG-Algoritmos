@@ -7,7 +7,25 @@ def calculate_angle(origin, point):
 def euclidean_distance(p1, p2):
     return math.sqrt((p2[0]-p1[0])**2 + (p2[1]-p1[1])**2)
 
-def define_route(coordinates, depot, demands, capacity, max_distance):
+def build_rcl_by_angles(candidates, alpha):
+    if not candidates:
+        return []
+    
+    normalized_candidates = []
+    for idx, angle in candidates:
+        norm_angle = angle if angle >= 0 else angle + 2 * math.pi
+        normalized_candidates.append((idx, norm_angle))
+    
+    angles = [angle for _, angle in normalized_candidates]
+    s_max = max(angles)
+    s_min = min(angles)
+    
+    threshold = s_max - alpha * (s_max - s_min)
+    rcl = [candidate for candidate in normalized_candidates if candidate[1] >= threshold]
+    
+    return rcl
+
+def define_grasp_route(coordinates, depot, demands, capacity, max_distance, alpha=0.75):
     if depot is None:
         raise ValueError("Error: el Depot no puede ser None. Verifica que las coordenadas sean válidas.")
     
@@ -19,8 +37,18 @@ def define_route(coordinates, depot, demands, capacity, max_distance):
         (i, calculate_angle(depot, coordinates[i]))
         for i in client_indices
     ]
-    clients_with_angles.sort(key=lambda x: -x[1])
-    ordered_indices = [x[0] for x in clients_with_angles]
+
+    ordered_indices = []
+    remaining_clients = clients_with_angles.copy()
+    
+    while remaining_clients:
+        rcl = build_rcl_by_angles(remaining_clients, alpha)
+        if not rcl:
+            break
+        
+        selected = random.choice(rcl)
+        ordered_indices.append(selected[0])
+        remaining_clients.remove((selected[0], calculate_angle(depot, coordinates[selected[0]])))
 
     remaining_indices = ordered_indices.copy()
 
@@ -43,7 +71,7 @@ def define_route(coordinates, depot, demands, capacity, max_distance):
                 valid_indices.append(i)
 
         if valid_indices:
-            next_index = valid_indices[0]   
+            next_index = valid_indices[0]
             next_point = coordinates[next_index]
             dist_to_next = euclidean_distance(current_point, next_point)
             total_distance += dist_to_next

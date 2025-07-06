@@ -3,6 +3,7 @@ import time
 from route import define_route
 from local_search import combined_optimization
 from utils import calculate_route_time
+from route_grasp import define_grasp_route
 
 def localsearch(clean_routes, coordinates, demands_vector, capacity, depot_coords, max_distance, route_time):
     optimized_routes, optimized_time = combined_optimization(
@@ -100,7 +101,7 @@ for i in range(1,101):
         route_time = new_route_time
         route_final = route_to_follow
         trucks_final = trucks
-        final_time = end_time-start_time
+    final_time += end_time-start_time
 
 clean_routes = []
 for truck_route in route_final:
@@ -115,9 +116,15 @@ for i, route in enumerate(clean_routes, 1):
     print(f"Route {i} distance: {distance:.2f}")
     total_initial_distance += distance
 print(f"Total initial distance: {total_initial_distance:.2f}")
+print(f"Execution time: {final_time:.2f}")
 print(f"Reported initial distance: {route_time:.2f}")
 if abs(total_initial_distance - route_time) > 0.01:
     print("WARNING: Initial distance calculation mismatch!")
+
+print(f"Number of trucks used: {trucks_final}")
+print(f"Total time: {route_time:.2f}")
+for i in clean_routes:
+    print(f"Route {i}: {route}")
 
 #endregion
 
