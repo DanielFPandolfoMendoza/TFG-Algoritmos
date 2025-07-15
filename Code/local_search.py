@@ -208,6 +208,7 @@ def combined_optimization(routes, coordinates, demands_vector, capacity, depot_c
                 current_routes = optimized_routes
                 best_total_time = total_time
                 improvement_found = True
+                break
                 print(f"Found improvement: {best_total_time}")
     
     # Final verification of the best solution
